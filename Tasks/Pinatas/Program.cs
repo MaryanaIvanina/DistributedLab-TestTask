@@ -4,7 +4,7 @@
     {
         static void Main()
         {
-            int result = 0;
+            int result;
 
             Console.WriteLine("Enter an array of pinatas separated by spaces:");
             string input = Console.ReadLine();

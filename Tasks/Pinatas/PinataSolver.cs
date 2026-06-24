@@ -3,11 +3,13 @@
     internal class PinataSolver
     {
         private int[] _extendedPinatas;
+        private int[,] _memo;
         public int CalculateMaxAmount(int[] pinatas)
         {
             int n = pinatas.Length;
 
             _extendedPinatas = new int[n + 2];
+            _memo = new int[n + 2, n + 2];
 
             _extendedPinatas[0] = 1;
             _extendedPinatas[n + 1] = 1;
@@ -24,6 +26,8 @@
         {
             if (left + 1 == right)
                 return 0;
+            if (_memo[left, right] > 0)
+                return _memo[left, right];
 
             int maxAmount = 0;
 
@@ -40,6 +44,7 @@
                     maxAmount = total;
             }
 
+            _memo[left, right] = maxAmount;
             return maxAmount;
         }
     }
