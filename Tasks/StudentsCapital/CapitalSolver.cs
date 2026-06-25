@@ -11,12 +11,12 @@
                 int theHighestProfit = 0;
                 int theHighestProfitIndex = -1;
 
-                for (int k = 0; k < numberOfLaptops; k++)
+                for (int j = 0; j < numberOfLaptops; j++)
                 {
-                    if (gains[k] > theHighestProfit && prices[k] <= capital)
+                    if (gains[j] > theHighestProfit && prices[j] <= capital)
                     {
-                        theHighestProfit = gains[k];
-                        theHighestProfitIndex = k;
+                        theHighestProfit = gains[j];
+                        theHighestProfitIndex = j;
                     }
                 }
 
