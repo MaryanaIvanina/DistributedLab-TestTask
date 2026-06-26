@@ -82,6 +82,20 @@
             SetCell(startHeight, startWidth, "R");
             CreateRoad(startHeight, startWidth);
 
+            bool isExitFound = false;
+            while (!isExitFound)
+            {
+                int exit = new Random().Next(0, numberOfExteriorWalls);
+
+                if (exit != entrance && IsRoadNearby(exteriorWall[0, exit], exteriorWall[1, exit]))
+                {
+                    SetCell(exteriorWall[0, exit], exteriorWall[1, exit], "X");
+                    isExitFound = true;
+                    break;
+                }
+                else continue;
+            }
+
             return maze;
         }
 
@@ -114,6 +128,31 @@
                 }
                 else continue;
             }
+        }
+
+        private bool IsRoadNearby(int exitHeight, int exitWidth)
+        {
+            int[] dHeight = { -1, 1, 0, 0 };
+            int[] dWidth = { 0, 0, -1, 1 };
+
+            List<int> directions = new List<int> { 0, 1, 2, 3 };
+            Shuffle(directions);
+
+            foreach (int dir in directions)
+            {
+                int nextRoomHeight = exitHeight + dHeight[dir];
+                int nextRoomWidth = exitWidth + dWidth[dir];
+
+                if (nextRoomHeight > 0 && nextRoomHeight < height - 1 &&
+                    nextRoomWidth > 0 && nextRoomWidth < width - 1)
+                {
+                    if (maze[nextRoomHeight, nextRoomWidth] == "R")
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private void CreateRoad(int currentHeight, int currentWidth)
