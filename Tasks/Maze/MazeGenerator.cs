@@ -8,6 +8,8 @@
         int startHeight;
         int startWidth;
         int numberOfRoads;
+        int exitHeight;
+        int exitWidth;
         public string[,] GenerateMaze(int matrixHeight, int matrixWidth)
         {
             height = matrixHeight;
@@ -91,12 +93,15 @@
 
                 if (exit != entrance && IsRoadNearby(exteriorWall[0, exit], exteriorWall[1, exit]))
                 {
-                    SetCell(exteriorWall[0, exit], exteriorWall[1, exit], "X");
+                    exitHeight = exteriorWall[0, exit];
+                    exitWidth = exteriorWall[1, exit];
                     isExitFound = true;
                     break;
                 }
                 else continue;
             }
+
+            SetCell(exitHeight, exitWidth, "X");
 
             int treasure = new Random().Next(0, numberOfRoads);
             if (treasure != 0)
@@ -116,6 +121,52 @@
                         }
                     }
                     if (treasure == 0) break;
+                }
+            }
+
+            List<int[]> rightWay = FindTheRightWay(startHeight, startWidth, exitHeight, exitWidth);
+
+            int numberOfTraps = new Random().Next(0, 5);
+
+            if (numberOfTraps != 0)
+            {
+                int[,] traps = new int[numberOfTraps, 2];
+
+                for (int i = 0; i < numberOfTraps; i++)
+                {
+                    bool isTrapPlaced = false;
+                    while (!isTrapPlaced)
+                    {
+                        int trapHeight = new Random().Next(1, height - 1);
+                        int trapWidth = new Random().Next(1, width - 1);
+
+                        if (maze[trapHeight, trapWidth] == "R")
+                        {
+                            traps[i, 0] = trapHeight;
+                            traps[i, 1] = trapWidth;
+                            isTrapPlaced = true;
+                            break;
+                        }
+                        else continue;
+                    }
+                }
+
+                int trapsLimitOnTheRightWay = 2;
+
+                for (int i = 0; i < numberOfTraps; i++)
+                {
+                    int trapHeight = traps[i, 0];
+                    int trapWidth = traps[i, 1];
+                    if (rightWay.Exists(cell => cell[0] == trapHeight && cell[1] == trapWidth))
+                    {
+                        if (trapsLimitOnTheRightWay != 0)
+                        {
+                            SetCell(trapHeight, trapWidth, "P");
+                            trapsLimitOnTheRightWay--;
+                        }
+                    }
+                    else
+                        SetCell(trapHeight, trapWidth, "P");
                 }
             }
 
@@ -209,6 +260,58 @@
                     }
                 }
             }
+        }
+
+        private List<int[]> FindTheRightWay(int startH, int startW, int exitH, int exitW)
+        {
+            Queue<int[]> queue = new Queue<int[]>();
+            bool[,] visited = new bool[height, width];
+
+            Dictionary<string, int[]> parentMap = new Dictionary<string, int[]>();
+
+            queue.Enqueue(new int[] { startH, startW });
+            visited[startH, startW] = true;
+
+            int[] dH = { -1, 1, 0, 0 };
+            int[] dW = { 0, 0, -1, 1 };
+
+            while (queue.Count > 0)
+            {
+                int[] current = queue.Dequeue();
+                int currH = current[0];
+                int currW = current[1];
+
+                if (currH == exitH && currW == exitW) break;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    int nextH = currH + dH[i];
+                    int nextW = currW + dW[i];
+
+                    if (nextH >= 0 && nextH < height && nextW >= 0 && nextW < width)
+                    {
+                        if (!visited[nextH, nextW] && (maze[nextH, nextW] == "R" || maze[nextH, nextW] == "E"))
+                        {
+                            visited[nextH, nextW] = true;
+                            queue.Enqueue(new int[] { nextH, nextW });
+
+                            parentMap[$"{nextH},{nextW}"] = new int[] { currH, currW };
+                        }
+                    }
+                }
+            }
+
+            List<int[]> rightWay = new List<int[]>();
+            string currentKey = $"{exitH},{exitW}";
+
+            while (parentMap.ContainsKey(currentKey))
+            {
+                int[] parent = parentMap[currentKey];
+                rightWay.Add(parent);
+                currentKey = $"{parent[0]},{parent[1]}";
+            }
+
+            return rightWay;
         }
 
         private void Shuffle(List<int> list)

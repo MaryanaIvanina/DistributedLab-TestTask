@@ -41,8 +41,10 @@
                         Console.ForegroundColor = ConsoleColor.Blue;
                     else if (maze[i, j] == "T")
                         Console.ForegroundColor = ConsoleColor.White;
+                    else if (maze[i, j] == "P")
+                        Console.ForegroundColor = ConsoleColor.Magenta;
 
-                    Console.Write(maze[i, j] + " ");
+                        Console.Write(maze[i, j] + " ");
                 }
                 Console.WriteLine();
             }
