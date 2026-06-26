@@ -118,44 +118,46 @@
 
         private void CreateRoad(int currentHeight, int currentWidth)
         {
-            List<List<int>> validSteps = CheckAdjacentCells(currentHeight, currentWidth);
-            if (validSteps.Count != 0)
+            int[] dHeight = { -2, 2, 0, 0 };
+            int[] dWidth = { 0, 0, -2, 2 };
+
+            List<int> directions = new List<int> { 0, 1, 2, 3 };
+            Shuffle(directions);
+
+            foreach (int dir in directions)
             {
-                int randomIndex = new Random().Next(0, validSteps.Count);
-                SetCell(validSteps[randomIndex][0], validSteps[randomIndex][1], "R");
-                CreateRoad(validSteps[randomIndex][0], validSteps[randomIndex][1]);
-            }
-            else
-                return;
-        }
+                int nextRoomHeight = currentHeight + dHeight[dir];
+                int nextRoomWidth = currentWidth + dWidth[dir];
 
-        private List<List<int>> CheckAdjacentCells(int currentHeight, int currentWidth)
-        {
-            List<List<int>> validSteps = new List<List<int>>();
-            int step = -1;
-
-            for (int j = 0; j < 4; j++)
-            {
-                List<int> indexes = new List<int>();
-                int heightCandidate = currentHeight;
-                int widthCandidate = currentWidth;
-                step = step * -1;
-
-                if (j >= 2) widthCandidate += step;
-                else heightCandidate += step;
-
-                if (heightCandidate >= 0 && heightCandidate < height && widthCandidate >= 0 && widthCandidate < width)
+                if (nextRoomHeight > 0 && nextRoomHeight < height - 1 &&
+                    nextRoomWidth > 0 && nextRoomWidth < width - 1)
                 {
-                    if (maze[heightCandidate, widthCandidate] == "#")
+                    if (maze[nextRoomHeight, nextRoomWidth] == "#" || maze[nextRoomHeight, nextRoomWidth] == "W")
                     {
-                        indexes.Add(heightCandidate);
-                        indexes.Add(widthCandidate);
-                        validSteps.Add(indexes);
+                        int wallToBreakHeight = currentHeight + (dHeight[dir] / 2);
+                        int wallToBreakWidth = currentWidth + (dWidth[dir] / 2);
+
+                        SetCell(wallToBreakHeight, wallToBreakWidth, "R");
+
+                        SetCell(nextRoomHeight, nextRoomWidth, "R");
+
+                        CreateRoad(nextRoomHeight, nextRoomWidth);
                     }
                 }
             }
+        }
 
-            return validSteps;
+        private void Shuffle(List<int> list)
+        {
+            Random random = new Random();
+            int n = list.Count;
+            for (int i = n - 1; i > 0; i--)
+            {
+                int j = random.Next(0, i + 1);
+                int temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+            }
         }
 
         private void SetCell(int heightIndex, int widthIndex, string value)
