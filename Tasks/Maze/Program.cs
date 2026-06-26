@@ -39,6 +39,8 @@
                         Console.ForegroundColor = ConsoleColor.Yellow;
                     else if (maze[i, j] == "X")
                         Console.ForegroundColor = ConsoleColor.Blue;
+                    else if (maze[i, j] == "T")
+                        Console.ForegroundColor = ConsoleColor.White;
 
                     Console.Write(maze[i, j] + " ");
                 }

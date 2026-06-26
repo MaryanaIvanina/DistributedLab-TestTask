@@ -7,6 +7,7 @@
         int width;
         int startHeight;
         int startWidth;
+        int numberOfRoads;
         public string[,] GenerateMaze(int matrixHeight, int matrixWidth)
         {
             height = matrixHeight;
@@ -80,6 +81,7 @@
 
             SearchStartingPoint(exteriorWall[0, entrance], exteriorWall[1, entrance]);
             SetCell(startHeight, startWidth, "R");
+            numberOfRoads++;
             CreateRoad(startHeight, startWidth);
 
             bool isExitFound = false;
@@ -94,6 +96,27 @@
                     break;
                 }
                 else continue;
+            }
+
+            int treasure = new Random().Next(0, numberOfRoads);
+            if (treasure != 0)
+            {
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        if (maze[i, j] == "R")
+                        {
+                            if (treasure == 0)
+                            {
+                                SetCell(i, j, "T");
+                                break;
+                            }
+                            else treasure--;
+                        }
+                    }
+                    if (treasure == 0) break;
+                }
             }
 
             return maze;
@@ -179,6 +202,8 @@
                         SetCell(wallToBreakHeight, wallToBreakWidth, "R");
 
                         SetCell(nextRoomHeight, nextRoomWidth, "R");
+
+                        numberOfRoads += 2;
 
                         CreateRoad(nextRoomHeight, nextRoomWidth);
                     }
