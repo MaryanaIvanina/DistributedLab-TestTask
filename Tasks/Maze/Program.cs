@@ -32,15 +32,13 @@
                     if (maze[i, j] == "#")
                         Console.ForegroundColor = ConsoleColor.DarkGray;
                     else if (maze[i, j] == "E")
-                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                     else if (maze[i, j] == "R")
-                        Console.ForegroundColor = ConsoleColor.Red;
-                    else if (maze[i, j] == "W")
-                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.ForegroundColor = ConsoleColor.Black;
                     else if (maze[i, j] == "X")
-                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.ForegroundColor = ConsoleColor.Green;
                     else if (maze[i, j] == "T")
-                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                     else if (maze[i, j] == "P")
                         Console.ForegroundColor = ConsoleColor.Magenta;
 
