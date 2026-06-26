@@ -5,7 +5,6 @@
         string[,] maze;
         int height;
         int width;
-        int numberOfRoads;
         int exitHeight;
         int exitWidth;
         Random random = new Random();
@@ -44,7 +43,6 @@
 
             TryCheckAdjacentCells(1, exteriorWalls[entrance][0], exteriorWalls[entrance][1], 1, height - 1, 1, width - 1, false, "#", out int startHeight, out int startWidth);
             SetCell(startHeight, startWidth, "R");
-            numberOfRoads++;
             CreateRoad(startHeight, startWidth);
 
             bool isExitFound = false;
@@ -137,7 +135,6 @@
                             MakeStep(currentHeight, currentWidth, dHeight[dir] / 2, dWidth[dir] / 2, out int wallToBreakHeight, out int wallToBreakWidth);
                             SetCell(wallToBreakHeight, wallToBreakWidth, "R");
                             SetCell(targetHeight, targetWidth, "R");
-                            numberOfRoads += 2;
                             CreateRoad(targetHeight, targetWidth);
                         }
                     }
@@ -160,7 +157,7 @@
 
             Dictionary<string, int[]> parentMap = new Dictionary<string, int[]>();
 
-            queue.Enqueue(new int[] { startH, startW });
+            queue.Enqueue([startH, startW]);
             visited[startH, startW] = true;
 
             SetStep(1, out int[] dH, out int[] dW);
