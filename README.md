@@ -1,8 +1,9 @@
 # Distributed Lab Test Task
 
-This repository contains implementation of test tasks for Distributed Lab. Currently, two tasks has been implemented:
+This repository contains implementation of test tasks for Distributed Lab. Currently, tree tasks has been implemented:
 - Task #7 - Pinatas;
-- Task #8 - Students Capital.
+- Task #8 - Students Capital;
+- Task #2 - Maze.
 
 ## Task: Pinatas
 
@@ -65,3 +66,39 @@ Additional information
 - all logic is divided into separate classes in accordance with the Single Responsibility Principle.
 - interactive data entry is protected by an infinite loop, which prevents the program from crashing when text, empty string, or en incorrect numbernof arguments are entered, and require the user to enter data correctly without the risk of a StackOverflowException.
 - time spent on the task: 3 hours.
+
+
+## Task: Maze
+
+The program generates random mazes of a specified size with a guaranteed path from the entrance (E) to the exit (X), and also randomly places treasure (T) and traps (P).
+
+**How to run:**
+1. Open the Tasks solution file in your IDE.
+2. Set the Maze project as the Startup Project.
+3. Run the project.
+4. Enter the width and height of the Maze.
+5. Press Enter.
+Controls: arrow keys (Up, Down, Left, Right). The player is represented by the symbol 'O'.
+Objective: collect the treasure (if present; optional), avoid stepping on 3 traps, and reach the exit.
+
+The implementation uses similar to MVC pattern, that separates the generation logic (MazeGenerator), rendering (OutputData), safe input (InputData), and the game loop (GameEngine).
+
+The followong algorithms were used in the development of the program:
+1. Maze generation - DFS:
+   depth-first search with a step size of 2 cells is used to create the perfect maze without loops, where the wisth of walls and path is always 1 cell.
+2. Passability check and finding the shortest path - BFS:
+   breadth-first search that the player can always reach the exit. The algirithm finds the shortest path and controls the placnebt of traps: there no more than 2 traps on the single correct path (death occurs after 3), while the remaining traps are scattered across the wrong branches.
+
+**Big O Notation**
+
+Let 'V' be the total munber of cells inthe maze matrix (width * height)
+
+**Time Complexity: O(V)**
+
+During maze generation, the DFS algorithm visits each cell a constant number of times. The BFS algorithm for finding the shortest path also scans the cells of the matrix at most once. The subsequent placment of treasure and traps takes O(V) time or less (via a random search of avalaible paths). The overall time complexity is linearly proportional to the area of the maze - O(V).
+
+**Space Complexity: O(V)**
+
+To run the program, a two-dimensional array of type string[,] of size width * height is created. The BFS algorithm also uses a Queue and an array of visited cells 'visited', which, in the worst case, scale proportionally to the size of the maze. Therefore, memory usage is O(V).
+
+Time spent on the task: 12 hours.
