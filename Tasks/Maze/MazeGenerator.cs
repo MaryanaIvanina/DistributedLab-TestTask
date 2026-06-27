@@ -24,10 +24,10 @@
             
             List<int[]> exteriorWalls = new List<int[]>();
 
-            for (int j = 0; j < width; j++)
+            for (int i = 1; i < width - 1; i++)
             {
-                exteriorWalls.Add([0, j]);
-                exteriorWalls.Add([height - 1, j]);
+                exteriorWalls.Add([0, i]);
+                exteriorWalls.Add([height - 1, i]);
             }
 
             for (int i = 1; i < height - 1; i++)
@@ -49,7 +49,7 @@
             while (!isExitFound)
             {
                 int exit = random.Next(0, numberOfExteriorWalls);
-                if (TryCheckAdjacentCells(1, exteriorWalls[exit][0], exteriorWalls[exit][1], 1, height - 1, 1, width - 1, false, "R", out int roadHeight, out int roadtWidth))
+                if (TryCheckAdjacentCells(1, exteriorWalls[exit][0], exteriorWalls[exit][1], 1, height - 1, 1, width - 1, false, "R", out int roadHeight, out int roadWidth))
                 {
                     if (exit != entrance)
                     {
@@ -78,14 +78,14 @@
                 }
             }
 
-            List<int[]> rightWay = FindTheRightWay(startHeight, startWidth, exitHeight, exitWidth);
+            List<int[]> shortestPath = FindShortestPath(startHeight, startWidth, exitHeight, exitWidth);
 
 
             int numberOfTraps = random.Next(0, 6);
             if (numberOfTraps != 0)
             {
                 int trapsPlaced = 0;
-                int trapsLimitOnTheRightWay = 2;
+                int trapsAllowedOnShortestPath = 2;
 
                 while (trapsPlaced < numberOfTraps)
                 {
@@ -94,15 +94,15 @@
 
                     if (maze[tHeight, tWidth] == "R")
                     {
-                        bool isOnRightWay = rightWay.Exists(cell => cell[0] == tHeight && cell[1] == tWidth);
+                        bool isOnShortestPath = shortestPath.Exists(cell => cell[0] == tHeight && cell[1] == tWidth);
 
-                        if (isOnRightWay && trapsLimitOnTheRightWay > 0)
+                        if (isOnShortestPath && trapsAllowedOnShortestPath > 0)
                         {
                             SetCell(tHeight, tWidth, "P");
-                            trapsLimitOnTheRightWay--;
+                            trapsAllowedOnShortestPath--;
                             trapsPlaced++;
                         }
-                        else if (!isOnRightWay)
+                        else if (!isOnShortestPath)
                         {
                             SetCell(tHeight, tWidth, "P");
                             trapsPlaced++;
@@ -150,7 +150,7 @@
             TryCheckAdjacentCells(2, currentHeight, currentWidth, 1, height - 1, 1, width - 1, true, "#", out int nextRoomHeight, out int nextRoomWidth);
         }
 
-        private List<int[]> FindTheRightWay(int startH, int startW, int exitH, int exitW)
+        private List<int[]> FindShortestPath(int startH, int startW, int exitH, int exitW)
         {
             Queue<int[]> queue = new Queue<int[]>();
             bool[,] visited = new bool[height, width];
@@ -188,17 +188,17 @@
                 }
             }
 
-            List<int[]> rightWay = new List<int[]>();
+            List<int[]> shortestPathCells = new List<int[]>();
             string currentKey = $"{exitH},{exitW}";
 
             while (parentMap.ContainsKey(currentKey))
             {
                 int[] parent = parentMap[currentKey];
-                rightWay.Add(parent);
+                shortestPathCells.Add(parent);
                 currentKey = $"{parent[0]},{parent[1]}";
             }
 
-            return rightWay;
+            return shortestPathCells;
         }
 
         private void Shuffle(List<int> list)
