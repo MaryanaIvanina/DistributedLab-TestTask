@@ -22,30 +22,10 @@
                 return;
             }
 
+            Console.Clear();
+
             MazeGenerator generator = new MazeGenerator();
             string[,] maze = generator.GenerateMaze(height, width);
-
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    if (maze[i, j] == "#")
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                    else if (maze[i, j] == "E")
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                    else if (maze[i, j] == "R")
-                        Console.ForegroundColor = ConsoleColor.Black;
-                    else if (maze[i, j] == "X")
-                        Console.ForegroundColor = ConsoleColor.Green;
-                    else if (maze[i, j] == "T")
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                    else if (maze[i, j] == "P")
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-
-                        Console.Write(maze[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
 
             int playerHeight = 0;
             int playerWidth = 0;
@@ -54,83 +34,34 @@
             {
                 for (int j = 0; j < width; j++)
                 {
-                    if (maze[i, j] == "E")
+                    switch (maze[i, j])
                     {
-                        playerHeight = i;
-                        playerWidth = j;
-                        break;
+                        case "#": Console.ForegroundColor = ConsoleColor.DarkGray; break;
+                        case "R": Console.ForegroundColor = ConsoleColor.Black; break;
+                        case "E":
+                            playerHeight = i;
+                            playerWidth = j;
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            break;
+                        case "X": Console.ForegroundColor = ConsoleColor.Green; break;
+                        case "P": Console.ForegroundColor = ConsoleColor.Magenta; break;
+                        case "T": Console.ForegroundColor = ConsoleColor.Yellow; break;
                     }
+
+                    Console.Write(maze[i, j] + " ");
                 }
+                Console.WriteLine();
             }
+
+            Console.SetCursorPosition(playerWidth * 2, playerHeight);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("O");
 
             bool isTreasureFound = false;
             List<int[]> traps = new List<int[]>();
 
             while (true)
             {
-                Console.Clear();
-
-                for (int i = 0; i < height; i++)
-                {
-                    for (int j = 0; j < width; j++)
-                    {
-                        if (i == playerHeight && j == playerWidth)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write("O ");
-                        }
-                        else
-                        {
-                            if (maze[i, j] == "#") Console.ForegroundColor = ConsoleColor.DarkGray;
-                            else if (maze[i, j] == "E") Console.ForegroundColor = ConsoleColor.Cyan;
-                            else if (maze[i, j] == "R") Console.ForegroundColor = ConsoleColor.Black;
-                            else if (maze[i, j] == "X") Console.ForegroundColor = ConsoleColor.Green;
-                            else if (maze[i, j] == "T")
-                            {
-                                if (isTreasureFound) Console.ForegroundColor = ConsoleColor.DarkGray;
-                                else Console.ForegroundColor = ConsoleColor.Yellow;
-                            }
-                            else if (maze[i, j] == "P")
-                            {
-                                if (traps.Exists(t => t[0] == i && t[1] == j))
-                                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                                else
-                                    Console.ForegroundColor = ConsoleColor.Magenta;
-                            }
-
-                            Console.Write(maze[i, j] + " ");
-                        }
-                    }
-                    Console.WriteLine();
-                }
-                Console.ResetColor();
-
-                if (maze[playerHeight, playerWidth] == "X")
-                {
-                    Console.WriteLine("\nВітаю! Ви знайшли вихід!");
-                    break;
-                }
-                else if (maze[playerHeight, playerWidth] == "T")
-                {
-                    if (!isTreasureFound)
-                    {
-                        Console.WriteLine("\nВітаю! Ви знайшли скарб!");
-                        isTreasureFound = true;
-                    }
-                }
-                else if (maze[playerHeight, playerWidth] == "P")
-                {
-                    if (!traps.Exists(t => t[0] == playerHeight && t[1] == playerWidth))
-                        traps.Add([playerHeight, playerWidth]);
-                }
-
-                if (traps.Count >= 3)
-                {
-                    Console.WriteLine("\nВи потрапили в 3 пастки! Гру завершено.");
-                    break;
-                }
-
-                Console.WriteLine($"\nВи потрапили в {traps.Count} пастки!");
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 
                 int nextHeight = playerHeight;
@@ -146,12 +77,68 @@
 
                 if (maze[nextHeight, nextWidth] != "#" && maze[nextHeight, nextWidth] != "E")
                 {
+                    Console.SetCursorPosition(playerWidth * 2, playerHeight);
+
+                    switch (maze[playerHeight, playerWidth])
+                    {
+                        case "#": Console.ForegroundColor = ConsoleColor.DarkGray; break;
+                        case "R": Console.ForegroundColor = ConsoleColor.Black; break;
+                        case "E": Console.ForegroundColor = ConsoleColor.Cyan; break;
+                        case "X": Console.ForegroundColor = ConsoleColor.Green; break;
+                        case "P":
+                            if (traps.Exists(t => t[0] == playerHeight && t[1] == playerWidth))
+                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                            else
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                            break;
+                        case "T":
+                            if (isTreasureFound) Console.ForegroundColor = ConsoleColor.DarkGray;
+                            else Console.ForegroundColor = ConsoleColor.Yellow;
+                            break;
+                    }
+
+                    Console.Write(maze[playerHeight, playerWidth]);
+                    Console.ResetColor();
+                    Console.SetCursorPosition(0, height + 1);
+
                     playerHeight = nextHeight;
                     playerWidth = nextWidth;
+
+
+                    Console.WriteLine($"\nYou`ve fallen into {traps.Count} traps!");
+
+                    switch (maze[playerHeight, playerWidth])
+                    {
+                        case "X":
+                            if (isTreasureFound) Console.SetCursorPosition(0, height + 5);
+                            Console.WriteLine("\nCongratulations! You found the exit!");
+                            return;
+                        case "P":
+                            if (!traps.Exists(t => t[0] == playerHeight && t[1] == playerWidth))
+                                traps.Add([playerHeight, playerWidth]);
+                            break;
+                        case "T":
+                            if (!isTreasureFound)
+                            {
+                                Console.WriteLine("\nCongratulations! You found the treasure!");
+                                isTreasureFound = true;
+                            }
+                            break;
+                    }
+
+                    if (traps.Count >= 3)
+                    {
+                        Console.WriteLine("\nYou`ve fallen into 3 traps! The game is over.");
+                        break;
+                    }
+
+                    Console.SetCursorPosition(playerWidth * 2, playerHeight);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("O");
+
+                    Console.ResetColor();
                 }
             }
-
-            Console.ResetColor();
         }
     }
 }
