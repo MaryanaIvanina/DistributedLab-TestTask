@@ -12,12 +12,12 @@ namespace WebsiteAnalytics
             List<string> dublicates = new List<string>();
             List<string> secondDayVisitors = new List<string>();
 
-            bool isDublicaleFound = false;
+            bool isThisSecondVisitor = false;
 
             for (int i = 0; i < secondDay.Length; i++)
             {
-                isDublicaleFound = false;
                 string[] fields = secondDay[i].Split(',');
+
                 for (int j = 0; j < firstDay.Length; j++)
                 {
                     string[] firsDayFields = firstDay[j].Split(",");
@@ -26,11 +26,14 @@ namespace WebsiteAnalytics
                         if (!dublicates.Contains(fields[0]))
                         {
                             dublicates.Add(fields[0]);
-                            isDublicaleFound = true;
+                            break;
                         }
                     }
                 }
-                if (!isDublicaleFound && !dublicates.Contains(fields[0]) && !secondDayVisitors.Contains(fields[0])) secondDayVisitors.Add(fields[0]);
+                if (!secondDayVisitors.Contains(fields[0]) && !dublicates.Contains(fields[0]))
+                {
+                    secondDayVisitors.Add(fields[0]);
+                }
             }
 
             if (dublicates.Count > 0)
