@@ -30,7 +30,7 @@ namespace WebsiteAnalytics
                         }
                     }
                 }
-                if (!isDublicaleFound) secondDayVisitors.Add(fields[0]);
+                if (!isDublicaleFound && !dublicates.Contains(fields[0]) && !secondDayVisitors.Contains(fields[0])) secondDayVisitors.Add(fields[0]);
             }
 
             if (dublicates.Count > 0)
