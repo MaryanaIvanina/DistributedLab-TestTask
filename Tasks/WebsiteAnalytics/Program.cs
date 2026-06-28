@@ -23,8 +23,11 @@ namespace WebsiteAnalytics
                     string[] firsDayFields = firstDay[j].Split(",");
                     if (RecordMatches(fields[0], firsDayFields, 0))
                     {
-                        dublicates.Add(fields[0]);
-                        isDublicaleFound = true;
+                        if (!dublicates.Contains(fields[0]))
+                        {
+                            dublicates.Add(fields[0]);
+                            isDublicaleFound = true;
+                        }
                     }
                 }
                 if (!isDublicaleFound) secondDayVisitors.Add(fields[0]);
