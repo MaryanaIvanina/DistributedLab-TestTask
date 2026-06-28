@@ -6,19 +6,42 @@ namespace WebsiteAnalytics
     {
         static void Main(string[] args)
         {
-            string[] output = ReadMultipleRecords("23", "records.txt", 2);
+            string[] output = File.ReadAllLines("secondDay.txt");
+            List<string> dublicates = new List<string>();
+            List<string> secondDayVisitors = new List<string>();
 
             for (int i = 0; i < output.Length; i++)
             {
-                Console.WriteLine(output[i]);
+                string[] fields = output[i].Split(',');
+                if (ReadRecord(fields[0], "firstDay.txt", 0) != "Record not found")
+                    dublicates.Add(fields[0]);
+                else secondDayVisitors.Add(fields[0]);
             }
+
+            if (dublicates.Count > 0)
+            {
+                Console.WriteLine("Users that visited some pages on both days:");
+                for (int i = 0; i < dublicates.Count; i++)
+                {
+                    Console.WriteLine(dublicates[i]);
+                }
+            }
+            else Console.WriteLine("Dublicates not found");
+
+            if (secondDayVisitors.Count > 0)
+            {
+                Console.WriteLine("Users that on the second day visited the page that hadn’t been visited by this user on the first day");
+                for (int i = 0; i < secondDayVisitors.Count; i++)
+                {
+                    Console.WriteLine(secondDayVisitors[i]);
+                }
+            }
+            else Console.WriteLine("All users that visited the page on the second day also visited that page on the first day");
         }
 
-        public static string[] ReadMultipleRecords(string searchTerm, string filePath, int numberOfSearchTerm)
+        public static string ReadRecord(string searchTerm, string filePath, int numberOfSearchTerm)
         {
-            ArrayList records = new ArrayList();
-            string[] recordNotFound = { "Record not round" };
-
+            string recordNotFound = "Record not round";
             try
             {
                 string[] lines = File.ReadAllLines(filePath);
@@ -28,12 +51,10 @@ namespace WebsiteAnalytics
                     string[] fields = lines[i].Split(',');
                     if (RecordMatches(searchTerm, fields, numberOfSearchTerm))
                     {
-                        records.Add(lines[i]);
+                        return lines[i];
                     }
                 }
-
-                if (records.Count == 0) return recordNotFound; 
-                return (string[])records.ToArray(typeof(string));
+                return recordNotFound;
             }
             catch (Exception ex)
             {
