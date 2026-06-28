@@ -6,16 +6,28 @@ namespace WebsiteAnalytics
     {
         static void Main(string[] args)
         {
-            string[] output = File.ReadAllLines("secondDay.txt");
+            string[] secondDay = File.ReadAllLines("secondDay.txt");
+            string[] firstDay = File.ReadAllLines("firstDay.txt");
+
             List<string> dublicates = new List<string>();
             List<string> secondDayVisitors = new List<string>();
 
-            for (int i = 0; i < output.Length; i++)
+            bool isDublicaleFound = false;
+
+            for (int i = 0; i < secondDay.Length; i++)
             {
-                string[] fields = output[i].Split(',');
-                if (ReadRecord(fields[0], "firstDay.txt", 0) != "Record not found")
-                    dublicates.Add(fields[0]);
-                else secondDayVisitors.Add(fields[0]);
+                isDublicaleFound = false;
+                string[] fields = secondDay[i].Split(',');
+                for (int j = 0; j < firstDay.Length; j++)
+                {
+                    string[] firsDayFields = firstDay[j].Split(",");
+                    if (RecordMatches(fields[0], firsDayFields, 0))
+                    {
+                        dublicates.Add(fields[0]);
+                        isDublicaleFound = true;
+                    }
+                }
+                if (!isDublicaleFound) secondDayVisitors.Add(fields[0]);
             }
 
             if (dublicates.Count > 0)
@@ -37,30 +49,6 @@ namespace WebsiteAnalytics
                 }
             }
             else Console.WriteLine("All users that visited the page on the second day also visited that page on the first day");
-        }
-
-        public static string ReadRecord(string searchTerm, string filePath, int numberOfSearchTerm)
-        {
-            string recordNotFound = "Record not round";
-            try
-            {
-                string[] lines = File.ReadAllLines(filePath);
-
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    string[] fields = lines[i].Split(',');
-                    if (RecordMatches(searchTerm, fields, numberOfSearchTerm))
-                    {
-                        return lines[i];
-                    }
-                }
-                return recordNotFound;
-            }
-            catch (Exception ex)
-            {
-                return recordNotFound;
-                throw new Exception("An error occurred while reading the file: " + ex.Message);
-            }
         }
 
         private static bool RecordMatches(string searchTerm, string[] record, int numberOfSearchTerm)
