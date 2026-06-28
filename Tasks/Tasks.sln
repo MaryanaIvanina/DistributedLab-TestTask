@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentsCapital", "Students
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maze", "Maze\Maze.csproj", "{BC00F959-3F13-4E11-8C4D-7427FE059E8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteAnalytics", "WebsiteAnalytics\WebsiteAnalytics.csproj", "{516378B0-4CC6-41B9-A279-4196048282ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BC00F959-3F13-4E11-8C4D-7427FE059E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC00F959-3F13-4E11-8C4D-7427FE059E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC00F959-3F13-4E11-8C4D-7427FE059E8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{516378B0-4CC6-41B9-A279-4196048282ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516378B0-4CC6-41B9-A279-4196048282ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516378B0-4CC6-41B9-A279-4196048282ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516378B0-4CC6-41B9-A279-4196048282ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

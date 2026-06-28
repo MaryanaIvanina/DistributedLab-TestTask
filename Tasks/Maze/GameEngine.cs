@@ -75,7 +75,7 @@
                     switch (maze[playerHeight, playerWidth])
                     {
                         case "X":
-                            if (isTreasureFound) Console.SetCursorPosition(0, height + 3);
+                            Console.SetCursorPosition(0, height + 3);
                             Console.WriteLine("Congratulations! You found the exit!");
                             return;
                         case "P":
