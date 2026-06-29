@@ -1,9 +1,9 @@
 # Distributed Lab Test Task
 
-This repository contains implementation of test tasks for Distributed Lab. Currently, tree tasks has been implemented:
+This repository contains implementation of test tasks for Distributed Lab. Currently, four tasks has been implemented:
 - Task #7 - Pinatas;
 - Task #8 - Students Capital;
-- Task #2 - Maze.
+- Task #2 - Maze;
 - Task #3 - Website analitycs.
 
 ## Task: Pinatas
