@@ -4,6 +4,7 @@ This repository contains implementation of test tasks for Distributed Lab. Curre
 - Task #7 - Pinatas;
 - Task #8 - Students Capital;
 - Task #2 - Maze.
+- Task #3 - Website analitycs.
 
 ## Task: Pinatas
 
@@ -102,3 +103,46 @@ During maze generation, the DFS algorithm visits each cell a constant number of 
 To run the program, a two-dimensional array of type string[,] of size width * height is created. The BFS algorithm also uses a Queue and an array of visited cells 'visited', which, in the worst case, scale proportionally to the size of the maze. Therefore, memory usage is O(V).
 
 Time spent on the task: 12 hours.
+
+## Task: Website Analytics
+
+This application designed to analyze user behavior on an e-commerce website. The marketing department requires a tool to process visit logs from two separate days and identify a specific target audience. 
+
+The application parses two CSV files and finds all users who meet both of the following criteria:
+1. Visited some pages on both days;
+2. On the second day visited the page that hadn’t been visited by this user on the first day.
+
+
+**How to Run**
+
+1. Clone the repository and open the solution Tasks.sln in your IDE.
+2. Set the WebsiteAnalytics project as the Startup Project.
+3. Ensure that the input files (firstDay.txt and secondDay.txt) are placed in the root of the project.
+   File format structure: user_id,product_id,timestamp
+4. Run the project. The console will output the list of user_id`s that match the marketing criteria.
+
+**Big O Notation**
+
+The algorithm was designed to handle large datasets efficiently, optimizing both execution time and memory storage.
+
+**Time Complexity: O(N + M)**
+
+N - number of rows in the first day's file.
+
+M - number of rows in the second day's file.
+
+The solution:
+  1. Iterates through the first file once (O(N)).
+  2. Iterates through the second file once (O(M)).
+- Checking if a user exists and if a product was visited relies on Dictionary<TKey, TValue> and HashSet<T>. Both of these data structures provide O(1) complexity for lookups. Therefore, the total execution time scales linearly with the size of the input data.
+
+**Space Complexity: O(U * P)**
+
+U - number of unique users on the first day.
+
+P - average number of unique products visited per user.
+
+The program reads the files line-by-line as a stream. It never loads the entire file into RAM, drastically reducing memory usage, making it capable of processing multi-gigabyte files.
+The only data stored in memory is the day1Visits dictionary and the targetUsers set. Because we use HashSet<string>, duplicate visits to the exact same page by the same user are automatically discarded and not stored in memory.
+
+Time spent on the task: 5 hours.
